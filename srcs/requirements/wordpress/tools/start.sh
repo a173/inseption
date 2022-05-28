@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar
@@ -15,4 +15,4 @@ wp user create user2 user2@email.ru --user_pass=$USER_PASSWORD --allow-root
 sed -i 's/;daemonize = yes/daemonize = no/g' /etc/php/7.3/fpm/php-fpm.conf
 echo "listen = wordpress:9000" >> /etc/php/7.3/fpm/pool.d/www.conf
 
-service php7.3-fpm stop
+service php7.3-fpm start
