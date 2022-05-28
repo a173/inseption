@@ -1,0 +1,63 @@
+version: "2.2"
+
+#volumes:
+#  mariadb:
+#    name: mariadb
+#    driver: local
+#    driver_opts:
+#      type: ext4
+#      o: bind
+#      device: /Users/acaryn/data/mysql
+#  wordpress:
+#    name: wordpress
+#    driver: local
+#    driver_opts:
+#      type: ext4
+#      o: bind
+#      device: /Users/acaryn/data/mysql
+
+networks:
+  net:
+    name: acaryn
+
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: requirements/nginx
+    image: nginx
+    restart: always
+    networks:
+      - net
+    ports:
+      - 443:443
+#    volumes:
+#      - wordpress:/var/www/localhost/htdocs
+    depends_on:
+      - wordpress
+  mariadb:
+    container_name: mariadb
+    build:
+      context: requirements/mariadb
+    image: mariadb
+    restart: always
+    networks:
+      - net
+#    volumes:
+#      - mariadb:/var/lib/mysql
+    env_file:
+      - .env
+  wordpress:
+    container_name: wordpress
+    build:
+      context: requirements/wordpress
+    image: wordpress
+    restart: always
+    networks:
+      - net
+#    volumes:
+#      - wordpress:/var/www/localhost/htdocs
+    depends_on:
+      - mariadb
+    env_file:
+      - .env
