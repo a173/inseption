@@ -1,4 +1,4 @@
-version: "2.2"
+version: "3.9"
 
 #volumes:
 #  mariadb:
@@ -17,8 +17,7 @@ version: "2.2"
 #      device: /Users/acaryn/data/mysql
 
 networks:
-  net:
-    name: acaryn
+  inception:
 
 services:
   nginx:
@@ -28,11 +27,11 @@ services:
     image: nginx
     restart: always
     networks:
-      - net
+      - inception
     ports:
       - 443:443
 #    volumes:
-#      - wordpress:/var/www/localhost/htdocs
+#      - wordpress:/var/www
     depends_on:
       - wordpress
   mariadb:
@@ -41,8 +40,10 @@ services:
       context: requirements/mariadb
     image: mariadb
     restart: always
+    ports:
+      - 3306:3306
     networks:
-      - net
+      - inception
 #    volumes:
 #      - mariadb:/var/lib/mysql
     env_file:
@@ -54,9 +55,11 @@ services:
     image: wordpress
     restart: always
     networks:
-      - net
+      - inception
+    ports:
+      - 9000:9000
 #    volumes:
-#      - wordpress:/var/www/localhost/htdocs
+#      - wordpress:/var/www
     depends_on:
       - mariadb
     env_file:
