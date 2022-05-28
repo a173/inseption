@@ -10,3 +10,5 @@ mariadb:
 	docker-compose -f $(COMPOSE) exec mariadb sh
 down:
 	docker-compose -f $(COMPOSE) down -v
+rm:
+    docker builder prune
