@@ -8,5 +8,4 @@ RUN apt-get -y install wget curl mariadb-client
 RUN mkdir -p /run/php
 COPY tools/start.sh .
 
-CMD ["bash", "start.sh"]
-CMD ["php-fpm7.3", "-F"]
+CMD ["sh", "start.sh"]
