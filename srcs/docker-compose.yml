@@ -1,0 +1,81 @@
+version: "3.9"
+
+volumes:
+  mariadb:
+    name: mariadb
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /Users/acaryn/data/mysql
+  wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /Users/acaryn/data/www
+
+networks:
+  inception:
+
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: requirements/nginx
+    image: nginx
+    restart: always
+    networks:
+      - inception
+    ports:
+      - 443:443
+    volumes:
+      - wordpress:/var/www
+    depends_on:
+      - wordpress
+  mariadb:
+    container_name: mariadb
+    build:
+      context: requirements/mariadb
+    image: mariadb
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - inception
+    volumes:
+      - mariadb:/var/lib/mysql
+    environment:
+      - MYSQL_DB
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+  wordpress:
+    container_name: wordpress
+    build:
+      context: requirements/wordpress
+    image: wordpress
+    restart: always
+    networks:
+      - inception
+    ports:
+      - 9000:9000
+    volumes:
+      - wordpress:/var/www
+    depends_on:
+      - mariadb
+    environment:
+      - MYSQL_DB
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_HOST
+      - DOMAIN_NAME
+      - WP_TITLE
+      - ADMIN_USERNAME
+      - ADMIN_EMAIL
+      - ADMIN_PASSWORD
+      - USER_USERNAME_1
+      - USER_EMAIL_1
+      - USER_USERNAME_2
+      - USER_EMAIL_2
+      - USER_PASSWORD
